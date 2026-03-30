@@ -1,3 +1,5 @@
 /target
+/migration/target
 req.txt
 .env
+docker-compose.yml
