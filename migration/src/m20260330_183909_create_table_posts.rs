@@ -45,3 +45,9 @@ enum Posts {
     UserId,
     CreatedAt,
 }
+
+#[derive(DeriveIden)]
+enum Users {
+    Table,
+    Id,
+}
