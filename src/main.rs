@@ -1,3 +1,8 @@
+mod entities;
+mod handlers;
+mod repository;
+mod services;
+
 use sea_orm::{Database, DatabaseConnection};
 
 pub struct AppState {
