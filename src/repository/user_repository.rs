@@ -1,5 +1,5 @@
 use crate::entities::{posts::ActiveModel, prelude::Users, users};
-use sea_orm::{ActiveModelTrait, ActiveValue::Set, Database, DatabaseConnection, DbErr, Insert}; 
+use sea_orm::{ActiveModelTrait, ActiveValue::Set, Database, DatabaseConnection, DbErr, EntityTrait, Insert}; 
 
 pub async fn create(db: &DatabaseConnection, email: String) -> Result<users::Model, DbErr> {
     let new_user = users::ActiveModel {
@@ -9,10 +9,10 @@ pub async fn create(db: &DatabaseConnection, email: String) -> Result<users::Mod
     new_user.insert(db).await
 }
 
-pub fn find_all() {
-
+pub async fn find_all(db: &DatabaseConnection) -> Result<Vec<users::Model>, DbErr> {
+    Users::find().all(db).await
 }
 
-pub fn find_by_id() {
-
+pub async fn find_by_id(db: &DatabaseConnection, id: i32) -> Result<Option<users::Model>, DbErr> {
+    Users::find_by_id(id).one(db).await
 }
