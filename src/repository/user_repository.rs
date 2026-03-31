@@ -1,9 +1,11 @@
 use crate::entities::{posts::ActiveModel, prelude::Users, users};
-use sea_orm::{ActiveModelTrait, ActiveValue::Set, Database, DatabaseConnection, DbErr, EntityTrait, Insert}; 
+use sea_orm::{ActiveModelTrait, ActiveValue::Set, Database, DatabaseConnection, DbErr, EntityTrait, Insert};
+use chrono::Utc; 
 
-pub async fn create(db: &DatabaseConnection, email: String) -> Result<users::Model, DbErr> {
+pub async fn create_user(db: &DatabaseConnection, email: String) -> Result<users::Model, DbErr> {
     let new_user = users::ActiveModel {
         email: Set(email),
+        created_at: Set(Utc::now().naive_utc()),
         ..Default::default()
     };
     new_user.insert(db).await
