@@ -1,5 +1,5 @@
-use crate::entities::{posts::ActiveModel, prelude::Users, users};
-use sea_orm::{ActiveModelTrait, ActiveValue::Set, Database, DatabaseConnection, DbErr, EntityTrait, Insert};
+use crate::entities::{prelude::Users, users};
+use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection, DbErr, EntityTrait};
 use chrono::Utc; 
 
 pub async fn create_user(db: &DatabaseConnection, email: String) -> Result<users::Model, DbErr> {
