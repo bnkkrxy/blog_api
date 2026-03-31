@@ -11,10 +11,10 @@ pub async fn create_user(db: &DatabaseConnection, email: String) -> Result<users
     new_user.insert(db).await
 }
 
-pub async fn find_all(db: &DatabaseConnection) -> Result<Vec<users::Model>, DbErr> {
+pub async fn find_all_users(db: &DatabaseConnection) -> Result<Vec<users::Model>, DbErr> {
     Users::find().all(db).await
 }
 
-pub async fn find_by_id(db: &DatabaseConnection, id: i32) -> Result<Option<users::Model>, DbErr> {
+pub async fn find_user_by_id(db: &DatabaseConnection, id: i32) -> Result<Option<users::Model>, DbErr> {
     Users::find_by_id(id).one(db).await
 }
