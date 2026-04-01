@@ -2,8 +2,9 @@ mod entities;
 mod handlers;
 mod repository;
 mod services;
+mod errors;
 
-use sea_orm::{Database, DatabaseConnection};
+use sea_orm::Database;
 
 pub struct AppState {
     pub db: sea_orm::DatabaseConnection,

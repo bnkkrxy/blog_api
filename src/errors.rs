@@ -5,7 +5,8 @@ use axum::{
 };
 use serde_json::json;
 
-enum AppError {
+#[derive(Debug)]
+pub enum AppError {
     InvalidData(String), // 400
     NotFound(String), // 404
     InternalServer(String), // 500
@@ -13,6 +14,7 @@ enum AppError {
 
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
+        use AppError::*;
         let (status, error_message) = match self {
             InvalidData(err_msg) => (StatusCode::BAD_REQUEST, err_msg),
             NotFound(err_msg) => (StatusCode::NOT_FOUND, err_msg),
