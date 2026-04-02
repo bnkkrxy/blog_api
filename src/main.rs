@@ -9,7 +9,7 @@ use sea_orm::Database;
 use std::net::SocketAddr;
 use tower_http::trace::TraceLayer;
 
-use crate::handlers::user_handler;
+use crate::handlers::{post_handler, user_handler};
 
 pub struct AppState {
     pub db: sea_orm::DatabaseConnection,
@@ -28,6 +28,7 @@ async fn main() {
     let app: Router = Router::new()
         .route("/users", post(user_handler::create_user))
         .route("/users", get(user_handler::get_users))
+        .route("/posts", post(post_handler::create_post))
         .layer(TraceLayer::new_for_http())
         .with_state(db);
 
