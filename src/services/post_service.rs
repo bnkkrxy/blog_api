@@ -32,7 +32,7 @@ pub async fn get_posts_by_user_id(db: &DatabaseConnection, user_id: i32) -> Resu
         .map_err(|e| AppError::InternalServer(e.to_string()))
 }
 
-pub async fn get_posts_with_authors(db: &DatabaseConnection) -> Result<Vec<(posts::Model, Option<users::Model>)>, AppError> {
+pub async fn get_posts_with_authors(db: &DatabaseConnection) -> Result<Vec<(posts::Model, users::Model)>, AppError> {
     post_repository::find_posts_with_authors(db)
         .await
         .map_err(|e| AppError::InternalServer(e.to_string()))

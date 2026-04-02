@@ -21,6 +21,11 @@ pub async fn find_posts_by_user_id(db: &DatabaseConnection, user_id: i32) -> Res
     Posts::find_by_id(user_id).all(db).await
 }
 
-pub async fn find_posts_with_authors(db: &DatabaseConnection) -> Result<Vec<(posts::Model, Option<users::Model>)>, DbErr> {
-    Posts::find().find_also_related(Users).all(db).await
+pub async fn find_posts_with_authors(db: &DatabaseConnection) -> Result<Vec<(posts::Model, users::Model)>, DbErr> {
+    let result = Posts::find().find_with_related(Users).all(db).await?;
+    let transformed_result = result
+        .into_iter()
+        .filter_map(|(post, mut authors)| { authors.pop().map(|author| (post, author))})
+        .collect();
+    Ok(transformed_result)
 }
