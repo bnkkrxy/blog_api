@@ -4,8 +4,8 @@ mod repository;
 mod services;
 mod errors;
 
-use axum::{Router, routing::post};
-use sea_orm::{Database, DatabaseConnection};
+use axum::{Router, routing::{get, post}};
+use sea_orm::Database;
 use std::net::SocketAddr;
 
 use crate::handlers::user_handler;
@@ -22,6 +22,7 @@ async fn main() {
 
     let app: Router = Router::new()
         .route("/users", post(user_handler::create_user))
+        .route("/users", get(user_handler::get_users))
         .with_state(db);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

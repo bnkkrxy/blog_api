@@ -17,3 +17,10 @@ pub async fn create_user(
     let new_user = user_service::create_user(&db, payload.email).await?;
     Ok((StatusCode::CREATED, Json(new_user)))
 }
+
+pub async fn get_users(
+    State(db): State<DatabaseConnection>,
+) -> Result<Json<Vec<users::Model>>, AppError> {
+    let users = user_service::get_all_users(&db).await?;
+    Ok(Json(users))
+}
