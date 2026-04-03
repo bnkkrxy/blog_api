@@ -1,7 +1,7 @@
 use axum::{Json, extract::{Path, State}, http::StatusCode};
 use sea_orm::DatabaseConnection;
 
-use crate::{entities::posts, errors::AppError, services::post_service};
+use crate::{entities::{posts, users}, errors::AppError, services::post_service};
 #[derive(serde::Deserialize)]
 pub struct CreatePostRequest {
     pub title: String,
@@ -33,3 +33,9 @@ pub async fn get_post_by_user_id(
     Ok(Json(posts))
 }
 
+pub async fn get_posts_with_authors(
+    State(db): State<DatabaseConnection>
+) -> Result<Json<Vec<(posts::Model, users::Model)>>, AppError> {
+    let result = post_service::get_posts_with_authors(&db).await?;
+    Ok(Json(result))
+}
