@@ -1,4 +1,4 @@
-use axum::{Json, extract::State, http::StatusCode};
+use axum::{Json, extract::{Path, State}, http::StatusCode};
 use sea_orm::DatabaseConnection;
 
 use crate::{entities::posts, errors::AppError, services::post_service};
@@ -22,6 +22,14 @@ pub async fn get_posts(
     State(db): State<DatabaseConnection>
 ) -> Result<Json<Vec<posts::Model>>, AppError> {
     let posts = post_service::get_all_posts(&db).await?;
+    Ok(Json(posts))
+}
+
+pub async fn get_post_by_user_id(
+    State(db): State<DatabaseConnection>,
+    Path(user_id): Path<i32>
+) -> Result<Json<Vec<posts::Model>>, AppError> {
+    let posts = post_service::get_posts_by_user_id(&db, user_id).await?;
     Ok(Json(posts))
 }
 
