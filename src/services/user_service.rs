@@ -18,7 +18,7 @@ pub async fn get_all_users(db: &DatabaseConnection) -> Result<Vec<users::Model>,
         .map_err(|e| AppError::InternalServer(e.to_string()))
 }
 
-pub async fn get_all_users_by_id(db: &DatabaseConnection, id: i32) -> Result<Option<users::Model>, AppError> {
+pub async fn get_user_by_id(db: &DatabaseConnection, id: i32) -> Result<Option<users::Model>, AppError> {
     user_repository::find_user_by_id(db, id)
         .await
         .map_err(|e| AppError::InternalServer(e.to_string()))

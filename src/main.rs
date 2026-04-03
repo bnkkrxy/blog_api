@@ -28,6 +28,7 @@ async fn main() {
     let app: Router = Router::new()
         .route("/users", post(user_handler::create_user))
         .route("/users", get(user_handler::get_users))
+        .route("/users/{id}/users", get(user_handler::get_user_by_id))
         .route("/posts", post(post_handler::create_post))
         .layer(TraceLayer::new_for_http())
         .with_state(db);

@@ -1,4 +1,4 @@
-use axum::{Json, extract::State, http::StatusCode};
+use axum::{Json, extract::{Path, State}, http::StatusCode};
 use sea_orm::DatabaseConnection;
 
 use crate::{entities::users, errors::AppError, services::user_service};
@@ -12,8 +12,7 @@ pub struct CreateUserRequest {
 pub async fn create_user(
     State(db): State<DatabaseConnection>, 
     Json(payload): Json<CreateUserRequest>
-    ) -> Result<(StatusCode, Json<users::Model>), AppError> {
-    
+) -> Result<(StatusCode, Json<users::Model>), AppError> {
     let new_user = user_service::create_user(&db, payload.email).await?;
     Ok((StatusCode::CREATED, Json(new_user)))
 }
@@ -23,4 +22,12 @@ pub async fn get_users(
 ) -> Result<Json<Vec<users::Model>>, AppError> {
     let users = user_service::get_all_users(&db).await?;
     Ok(Json(users))
+}
+
+pub async fn get_user_by_id(
+    Path(id): Path<i32>,
+    State(db): State<DatabaseConnection>
+) -> Result<Json<Option<users::Model>>, AppError> {
+    let user = user_service::get_user_by_id(&db, id).await?;
+    Ok(Json(user))
 }
