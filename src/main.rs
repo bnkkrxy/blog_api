@@ -30,6 +30,7 @@ async fn main() {
         .route("/users", get(user_handler::get_users))
         .route("/users/{id}/users", get(user_handler::get_user_by_id))
         .route("/posts", post(post_handler::create_post))
+        .route("/posts", get(post_handler::get_posts))
         .layer(TraceLayer::new_for_http())
         .with_state(db);
 

@@ -17,3 +17,11 @@ pub async fn create_post(
     let new_post = post_service::create_post(&db, payload.title, payload.body, payload.user_id).await?;
     Ok((StatusCode::CREATED, Json(new_post)))
 }
+
+pub async fn get_posts(
+    State(db): State<DatabaseConnection>
+) -> Result<Json<Vec<posts::Model>>, AppError> {
+    let posts = post_service::get_all_posts(&db).await?;
+    Ok(Json(posts))
+}
+
