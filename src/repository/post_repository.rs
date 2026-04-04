@@ -1,5 +1,5 @@
 use crate::entities::{posts, users, prelude::{Posts, Users}};
-use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection, DbErr, EntityTrait}; 
+use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection, DbErr, EntityTrait, QueryFilter, ColumnTrait}; 
 use chrono::Utc;
 
 pub async fn create_post(db: &DatabaseConnection, title: String, body: String, user_id: i32) -> Result<posts::Model, DbErr> {
@@ -18,7 +18,10 @@ pub async fn find_all_posts(db: &DatabaseConnection) -> Result<Vec<posts::Model>
 }
 
 pub async fn find_posts_by_user_id(db: &DatabaseConnection, user_id: i32) -> Result<Vec<posts::Model>, DbErr> {
-    Posts::find_by_id(user_id).all(db).await
+    posts::Entity::find()
+        .filter(posts::Column::UserId.eq(user_id))
+        .all(db)
+        .await
 }
 
 pub async fn find_posts_with_authors(db: &DatabaseConnection) -> Result<Vec<(posts::Model, users::Model)>, DbErr> {
