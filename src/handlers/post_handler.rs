@@ -39,3 +39,11 @@ pub async fn get_posts_with_authors(
     let result = post_service::get_posts_with_authors(&db).await?;
     Ok(Json(result))
 }
+
+pub async fn delete_post(
+    State(db): State<DatabaseConnection>,
+    Path(id): Path<i32>
+) -> Result<StatusCode, AppError> {
+    post_service::delete_post_by_id(&db, id).await?;
+    Ok(StatusCode::NO_CONTENT)
+}

@@ -38,3 +38,12 @@ pub async fn get_posts_with_authors(db: &DatabaseConnection) -> Result<Vec<(post
         .map_err(|e| AppError::InternalServer(e.to_string()))
 }
 
+pub async fn delete_post_by_id(db: &DatabaseConnection, post_id: i32) -> Result<u64, AppError> {
+    let result = post_repository::delete_post_by_id(db, post_id)
+        .await
+        .map_err(|e| AppError::InternalServer(e.to_string()))?;
+    if result.rows_affected == 0 {
+        return Err(AppError::NotFound(format!("Post with ID {} not found", post_id)));
+    }
+    Ok(result.rows_affected)
+}
