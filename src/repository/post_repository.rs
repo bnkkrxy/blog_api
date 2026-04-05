@@ -18,7 +18,7 @@ pub async fn find_all_posts(db: &DatabaseConnection) -> Result<Vec<posts::Model>
 }
 
 pub async fn find_posts_by_user_id(db: &DatabaseConnection, user_id: i32) -> Result<Vec<posts::Model>, DbErr> {
-    posts::Entity::find()
+    Posts::find()
         .filter(posts::Column::UserId.eq(user_id))
         .all(db)
         .await
@@ -31,4 +31,21 @@ pub async fn find_posts_with_authors(db: &DatabaseConnection) -> Result<Vec<(pos
         .filter_map(|(post, mut authors)| { authors.pop().map(|author| (post, author))})
         .collect();
     Ok(transformed_result)
+}
+
+pub async fn update_post_value(db: &DatabaseConnection, post_id: i32, new_title: String, new_body: String) -> Result<posts::Model, DbErr> {
+    let post = posts::Entity::find_by_id(post_id)
+        .one(db)
+        .await?
+        .ok_or(DbErr::RecordNotFound("Post not found".to_owned()))?;
+
+    let mut model: posts::ActiveModel = post.into();
+    model.title = Set(new_title);
+    model.body = Set(new_body);
+
+    model.update(db).await
+}
+
+pub async fn delete_post_by_id(db: &DatabaseConnection, post_id: i32) -> Result<sea_orm::DeleteResult, DbErr> {
+    Posts::delete_by_id(post_id).exec(db).await
 }

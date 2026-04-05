@@ -37,3 +37,4 @@ pub async fn get_posts_with_authors(db: &DatabaseConnection) -> Result<Vec<(post
         .await
         .map_err(|e| AppError::InternalServer(e.to_string()))
 }
+

@@ -31,3 +31,11 @@ pub async fn get_user_by_id(
     let user = user_service::get_user_by_id(&db, id).await?;
     Ok(Json(user))
 }
+
+pub async fn delete_user(
+    Path(id): Path<i32>,
+    State(db): State<DatabaseConnection>
+) -> Result<StatusCode, AppError> {
+    user_service::delete_user_by_id(&db, id).await?;
+    Ok(StatusCode::NO_CONTENT)
+}

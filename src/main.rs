@@ -4,7 +4,7 @@ mod repository;
 mod services;
 mod errors;
 
-use axum::{Router, routing::{get, post}};
+use axum::{Router, routing::{delete, get, post}};
 use sea_orm::Database;
 use std::net::SocketAddr;
 use tower_http::trace::TraceLayer;
@@ -29,6 +29,7 @@ async fn main() {
         .route("/users", post(user_handler::create_user))
         .route("/users", get(user_handler::get_users))
         .route("/users/{id}/users", get(user_handler::get_user_by_id))
+        .route("/users/{id}/delete", delete(user_handler::delete_user))
         .route("/posts", post(post_handler::create_post))
         .route("/posts", get(post_handler::get_posts))
         .route("/users/{id}/posts", get(post_handler::get_post_by_user_id))
