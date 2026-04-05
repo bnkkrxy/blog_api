@@ -8,6 +8,11 @@ pub struct CreatePostRequest {
     pub body: String,
     pub user_id: i32,
 }
+#[derive(serde::Deserialize)]
+pub struct UpdateUserRequest {
+    pub new_title: String,
+    pub new_body: String,
+}
 
 #[axum::debug_handler]
 pub async fn create_post(
@@ -38,6 +43,15 @@ pub async fn get_posts_with_authors(
 ) -> Result<Json<Vec<(posts::Model, users::Model)>>, AppError> {
     let result = post_service::get_posts_with_authors(&db).await?;
     Ok(Json(result))
+}
+
+pub async fn update_post(
+    State(db): State<DatabaseConnection>,
+    Path(id): Path<i32>,
+    Json(payload): Json<UpdateUserRequest>
+) -> Result<Json<posts::Model>, AppError> {
+    let updated_post = post_service::update_post_value(&db, id, payload.new_title, payload.new_body).await?;
+    Ok(Json(updated_post))
 }
 
 pub async fn delete_post(

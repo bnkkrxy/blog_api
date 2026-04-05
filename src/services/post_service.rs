@@ -38,6 +38,16 @@ pub async fn get_posts_with_authors(db: &DatabaseConnection) -> Result<Vec<(post
         .map_err(|e| AppError::InternalServer(e.to_string()))
 }
 
+pub async fn update_post_value(db: &DatabaseConnection, post_id: i32, new_title: String, new_body: String) -> Result<posts::Model, AppError> {
+    if new_title.is_empty() {
+        return Err(AppError::InvalidData("Title is empty".to_string()));
+    }
+
+    post_repository::update_post_value(db, post_id, new_title, new_body)
+        .await
+        .map_err(|e| AppError::InternalServer(e.to_string()))
+}
+
 pub async fn delete_post_by_id(db: &DatabaseConnection, post_id: i32) -> Result<u64, AppError> {
     let result = post_repository::delete_post_by_id(db, post_id)
         .await
