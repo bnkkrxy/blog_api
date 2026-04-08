@@ -11,10 +11,6 @@ use tower_http::trace::TraceLayer;
 
 use crate::handlers::{post_handler, user_handler};
 
-pub struct AppState {
-    pub db: sea_orm::DatabaseConnection,
-}
-
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
